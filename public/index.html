@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evergreen Content Engine</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Latest Articles</h1>
+  <ul id="articles"></ul>
+
+  <script>
+    fetch("/evergreen-content-engine/articles.json")
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById("articles");
+        if (!data.length) {
+          list.innerHTML = "<li>No articles yet</li>";
+          return;
+        }
+        data.forEach(article => {
+          const li = document.createElement("li");
+          li.innerHTML = `<a href="${article.url}">${article.title}</a>`;
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        document.getElementById("articles").innerHTML =
+          "<li>Article index not found</li>";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
